@@ -1,21 +1,9 @@
-mod learnList;
+mod learn_list;
 
-use learnList::firstList;
+use learn_list::first_list;
 
-fn loadMovie() {
-    /*
-    This function takes in a filename path and either returns an Error that the file was not found or the
-    reference to a List which has the loaded movie file.
-    */
-}
-
-fn playMovie() {
-    /*
-    This function takes ownership of a List struct representing a movie and plays the movie
-    */
-}
 
 fn main() {
-    let first_ll = firstList::FirstLinkedList::new();
+    let first_ll = first_list::FirstLinkedList::new();
     println!("Hello, world!");
 }
