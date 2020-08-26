@@ -39,7 +39,7 @@ pub fn load_movie(path : &Path) -> VecDeque<(u64, String)> {
     movie_vector
 }
 
-pub fn play_movie(mut movie : impl movie_reel::MovieReel) {
+pub fn play_movie(mut movie : impl movie_reel::MovieReel<(u64, String)>) {
     loop{
         match movie.pop_frame_from_head() {
             None => return,
