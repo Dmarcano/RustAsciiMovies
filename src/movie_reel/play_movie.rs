@@ -2,11 +2,14 @@ use super::movie_reel;
 use std::io::stdout;
 use std::{thread, time};
 use std::io::Write;
+use std::io::BufReader;
+use std::io::BufRead;
 use crate::movie_reel::movie_reel::MovieReel;
 use std::fs::File;
 use std::path::Path;
+use std::collections::vec_deque::VecDeque;
 
-impl<T> MovieReel for Vec<T> {
+impl<T> MovieReel for VecDeque<T> {
     fn push_frame_to_tail(&mut self) {
         unimplemented!()
     }
@@ -28,15 +31,23 @@ impl<T> MovieReel for Vec<T> {
     }
 }
 
-pub fn load_movie(path : &Path) -> Vec<(u64, String)> {
+pub fn load_movie(path : &Path) -> VecDeque<(u64, String)> {
     let display = path.display();
-
     // Open the path in read-only mode, returns `io::Result<File>`
-    let mut file = match File::open(&path) {
+    let file = match File::open(&path) {
         Err(why) => panic!("couldn't open {}: {}", display, why),
         Ok(file) => file,
     };
-    unimplemented!("Not implemented creating a movie!")
+    // use the BufReader interface to read the file line by line
+    let reader = BufReader::new(file); 
+
+    let mut movie_vector : VecDeque<(u64, String)> = VecDeque::new();
+    // if we can't read the file it is Ok to panic
+    for line in reader.lines().map(|l| l.unwrap()) { 
+        movie_vector.push_back((1 , line) );
+    }
+
+    movie_vector
 }
 
 pub fn play_movie(mut movie : impl movie_reel::MovieReel) {
