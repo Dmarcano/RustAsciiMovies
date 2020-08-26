@@ -7,6 +7,6 @@ use crate::movie_reel::play_movie::run;
 
 
 fn main() {
-    let file_name = String::from("test");
+    let file_name = String::from("public/file2.txt");
     run(file_name)
 }
