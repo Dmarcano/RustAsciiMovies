@@ -1,4 +1,4 @@
-use std::mem;
+
 
 pub struct SecondList<T> {
     head: Link<T>,
@@ -53,6 +53,10 @@ impl<T> SecondList<T> {
     pub fn into_iter(self) -> IntoIter<T> {
         IntoIter(self)
     }
+
+    pub fn iter<'a>(& 'a self) -> Iter< 'a, T> {
+        Iter{next : self.head.as_ref(). map(|node| &**node)}
+    }
 }
 
 impl<T> Drop for SecondList<T> {
@@ -64,7 +68,7 @@ fn drop(&mut self) {
     let mut curr_node = self.head.take();  //mem::replace(&mut self.head, Link::None);
     // while loop 
     while let Link::Some(mut boxed_node) = curr_node {
-        // tskr the next node and set it equal to 'Empty' so no furhter drops are made
+        // takes the next node and set it equal to 'Empty' so no furhter drops are made
         curr_node =boxed_node.next.take(); // mem::replace(&mut boxed_node.next,  Link::None);
     }
  }
@@ -84,15 +88,30 @@ impl <T> Iterator for IntoIter<T> {
 }
 
 /**
-Implementing Iter
+Implementing Iter. This is the start to using lifetimes
 */
 
+// we start with a struct called Iter. This struct has a 'next' field which has
+// an Option for a Reference of a SecondList of type T with lifetime 'a. Meaning that as long as
+// the SecondList with 'a is around then the Iter must also be kept alive by rust compiler
+pub struct Iter<'a, T> {
+    next: Option<&'a SecondNode<T>>,
+}
 
+// We are now implementing the Iterator trait for the Iter
+impl <'a, T> Iterator for Iter<'a, T> {
+    type Item = &'a T;
 
+    fn next(&mut self) -> Option<Self::Item> {
+        self.next.map( |node| {
+            self.next = self.next.as_ref().map(|node | &**node);
+            &node.data
+        } )
+    }
+}
 /**
 Implementing Iter mut
 */
-
 
 mod test { 
     use super::SecondList;
@@ -151,7 +170,17 @@ mod test {
         assert_eq!(iter.next() , Some(1));
     }
 
+    #[test]
+    pub fn iter_test() {
+        let mut list = SecondList::new();
+        list.push(1);
+        list.push(2);
+        list.push(3);
+        let mut iter = list.iter();
 
-
+        assert_eq!(iter.next(), Some(&3));
+        assert_eq!(iter.next(), Some(&2));
+        assert_eq!(iter.next(), Some(&1));
+    }
 
 }
