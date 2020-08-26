@@ -9,25 +9,14 @@ use std::fs::File;
 use std::path::Path;
 use std::collections::vec_deque::VecDeque;
 
-impl<T> MovieReel for VecDeque<T> {
-    fn push_frame_to_tail(&mut self) {
-        unimplemented!()
+impl<T> MovieReel<T> for VecDeque<T> {
+
+    fn pop_frame_from_tail(&mut self) -> Option<T> {
+        self.pop_back()
     }
 
-    fn push_frame_to_head(&mut self) {
-        unimplemented!()
-    }
-
-    fn pop_frame_from_tail(&mut self) -> Option<(u64, String)> {
-        unimplemented!()
-    }
-
-    fn pop_frame_from_head(&mut self) -> Option<(u64, String)> {
-        unimplemented!()
-    }
-
-    fn get_size(&mut self) -> usize {
-        unimplemented!()
+    fn pop_frame_from_head(&mut self) -> Option<T> {
+        self.pop_front()
     }
 }
 
