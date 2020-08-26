@@ -1,11 +1,11 @@
 pub trait MovieReel { 
-    pub fn push_frame_to_tail(&mut self);
+    fn push_frame_to_tail(&mut self);
 
-    pub fn push_frame_to_head(&mut self);
+    fn push_frame_to_head(&mut self);
 
-    pub fn pop_frame_from_tail(&mut self) -> Option<(i32,String)> ;
+    fn pop_frame_from_tail(&mut self) -> Option<(u64,String)> ;
 
-    pub fn pop_frame_from_head(&mut self) -> Option<(i32,String)> ;
+    fn pop_frame_from_head(&mut self) -> Option<(u64,String)> ;
 
-    pub fn get_size(&mut self) -> usize;
+     fn get_size(&mut self) -> usize;
 }

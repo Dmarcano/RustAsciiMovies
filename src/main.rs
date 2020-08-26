@@ -1,9 +1,12 @@
+mod movie_reel;
 mod learn_list;
 
 use learn_list::first_list;
+use crate::movie_reel::play_movie::run;
+
 
 
 fn main() {
-    let first_ll = first_list::FirstLinkedList::new();
-    println!("Hello, world!");
+    let file_name = String::from("test");
+    run(file_name)
 }

@@ -2,28 +2,53 @@ use super::movie_reel;
 use std::io::stdout;
 use std::{thread, time};
 use std::io::Write;
+use crate::movie_reel::movie_reel::MovieReel;
 
-pub fn load_movie{filename : String} -> movie_reel::MovieReel {
-    // TODO
+
+impl<T> MovieReel for Vec<T> {
+    fn push_frame_to_tail(&mut self) {
+        unimplemented!()
+    }
+
+    fn push_frame_to_head(&mut self) {
+        unimplemented!()
+    }
+
+    fn pop_frame_from_tail(&mut self) -> Option<(u64, String)> {
+        unimplemented!()
+    }
+
+    fn pop_frame_from_head(&mut self) -> Option<(u64, String)> {
+        unimplemented!()
+    }
+
+    fn get_size(&mut self) -> usize {
+        unimplemented!()
+    }
 }
 
-pub fn play_movie(movie : movie_reel::MovieReel) {
-    // TODO
+pub fn load_movie(filename : String) -> Vec<(u64, String)> {
+    unimplemented!("Not implemented creating a movie!")
+}
 
-    let size = movie.get_size();
-    let mut (count, frame);
-
-    for(i32 i =0; i < size; i++) {
+pub fn play_movie(mut movie : impl movie_reel::MovieReel) {
+    loop{
         let result = movie.pop_frame_from_head();
-
         match result {
-            None => return;  
-            Some(out_count, out__frame) => (count, frame);
+            None => return,
+            Some(out_count) => {
+                let count : u64= out_count.0;
+                let frame : String= out_count.1;
+                stdout().flush();
+                print!("{}" , frame);
+                let millis = time::Duration::from_millis(1000000*count/15);
+                thread::sleep(millis);
+            }
         }
-        // if we get a  count and frame then play them
-        stdout().flush();
-        print!("{}" , frame);
-        let millis = time::Duration::from_millis(1000000*count/15);
-        thread::sleep(millis);
     }
+}
+
+pub fn run(filename: String) {
+    let movie_reel = load_movie(filename);
+    play_movie(movie_reel);
 }
