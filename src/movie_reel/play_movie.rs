@@ -33,19 +33,18 @@ pub fn load_movie(path : &Path) -> VecDeque<(u64, String)> {
 
     let mut movie_vector : VecDeque<(u64, String)> = VecDeque::new();
     // if we can't read the file it is Ok to panic
-    let mut count : u64 = 0; 
+    let mut count : u64; 
     let mut accum = String::new();
     for (idx, line) in reader.lines().map(|l| l.unwrap()).enumerate() { 
-        match idx { 
-            0 => {count = line.parse().unwrap()}
-            x => {
-                accum = format!("{}{}\n", accum, line);
-                if x%14 == 0{
-                    movie_vector.push_back((count, accum));
-                    accum = String::new();
-                }
-            } 
-        } 
+    
+        if idx%14 == 0{
+            count = line.parse().unwrap();
+            movie_vector.push_back((count, accum));
+            accum = String::new();
+        }
+        else{
+            accum = format!("{}{}\n", accum, line);
+        }
     }
     movie_vector
 }
