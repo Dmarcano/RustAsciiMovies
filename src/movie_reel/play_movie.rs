@@ -1,16 +1,17 @@
-use super::movie_reel;
 use std::io::stdout;
 use std::{thread, time};
 use std::io::Write;
 use std::io::BufReader;
 use std::io::BufRead;
-use crate::movie_reel::movie_reel::MovieReel;
 use std::fs::File;
 use std::path::Path;
 use std::collections::vec_deque::VecDeque;
 
-impl<T> MovieReel<T> for VecDeque<T> {
+use super::movie_reel;
+use crate::movie_reel::movie_reel::MovieReel;
 
+
+impl<T> MovieReel<T> for VecDeque<T> {
     fn pop_frame_from_tail(&mut self) -> Option<T> {
         self.pop_back()
     }
@@ -32,10 +33,20 @@ pub fn load_movie(path : &Path) -> VecDeque<(u64, String)> {
 
     let mut movie_vector : VecDeque<(u64, String)> = VecDeque::new();
     // if we can't read the file it is Ok to panic
-    for line in reader.lines().map(|l| l.unwrap()) { 
-        movie_vector.push_back((1 , line) );
+    let mut count : u64 = 0; 
+    let mut accum = String::new();
+    for (idx, line) in reader.lines().map(|l| l.unwrap()).enumerate() { 
+        match idx { 
+            0 => {count = line.parse().unwrap()}
+            x => {
+                accum = accum + &line;
+                if x%14 == 0{
+                    movie_vector.push_back((count, accum.clone()));
+                    accum = String::new();
+                }
+            } 
+        } 
     }
-
     movie_vector
 }
 
@@ -61,4 +72,14 @@ pub fn play_movie(mut movie : impl movie_reel::MovieReel<(u64, String)>) {
 pub fn run(filename: &Path) {
     let movie_reel = load_movie(filename);
     play_movie(movie_reel);
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn movie_test() {
+        
+
+        assert_eq!(2 + 2, 4);
+    }
 }
