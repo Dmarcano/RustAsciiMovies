@@ -32,11 +32,10 @@ pub fn load_movie(path : &Path) -> VecDeque<(u64, String)> {
     let reader = BufReader::new(file); 
 
     let mut movie_vector : VecDeque<(u64, String)> = VecDeque::new();
-    // if we can't read the file it is Ok to panic
     let mut count : u64; 
     let mut accum = String::new();
+    // if we can't read the file it is Ok to panic
     for (idx, line) in reader.lines().map(|l| l.unwrap()).enumerate() { 
-    
         if idx%14 == 0{
             count = line.parse().unwrap();
             movie_vector.push_back((count, accum));
