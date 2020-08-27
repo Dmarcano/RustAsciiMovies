@@ -2,10 +2,12 @@ mod movie_reel;
 
 use crate::movie_reel::play_movie::run;
 use std::path::Path;
-//use clap::{Arg, App, SubCommand};
+use clap::{App, load_yaml};
 
 
 fn main() {
-    let path =Path::new("public/sw1.txt");
+    let yaml = load_yaml!("cli.yml");
+    let matches = App::from_yaml(yaml).get_matches();
+    let path = Path::new(matches.value_of("movie").unwrap());
     run(path)
 }
