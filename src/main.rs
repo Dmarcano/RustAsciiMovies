@@ -1,5 +1,4 @@
 mod movie_reel;
-mod learn_list;
 
 use crate::movie_reel::play_movie::run;
 use std::path::Path;
@@ -7,6 +6,6 @@ use std::path::Path;
 
 
 fn main() {
-    let path =Path::new("public/file2.txt");
+    let path =Path::new("public/sw1.txt");
     run(path)
 }

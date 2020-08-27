@@ -39,9 +39,9 @@ pub fn load_movie(path : &Path) -> VecDeque<(u64, String)> {
         match idx { 
             0 => {count = line.parse().unwrap()}
             x => {
-                accum = accum + &line;
+                accum = format!("{}{}\n", accum, line);
                 if x%14 == 0{
-                    movie_vector.push_back((count, accum.clone()));
+                    movie_vector.push_back((count, accum));
                     accum = String::new();
                 }
             } 
@@ -57,12 +57,13 @@ pub fn play_movie(mut movie : impl movie_reel::MovieReel<(u64, String)>) {
             Some(out_count) => {
                 let count : u64= out_count.0;
                 let frame : String= out_count.1;
+                print!("{}[2J", 27 as char);
                  match stdout().flush()  {
                     Ok(_) => {}
                     Err(why) => panic!("couldn't flush command line! {}", why),
                  }
                 print!("{}" , frame);
-                let millis = time::Duration::from_millis(1000000*count/15);
+                let millis = time::Duration::from_millis(1000*count/15);
                 thread::sleep(millis);
             }
         }
