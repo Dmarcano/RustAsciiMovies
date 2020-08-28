@@ -3,7 +3,6 @@ version: "1.0"
 author: Diego Marcano
 about: Plays any ascii movies in a .txt file that follow a specific ascii movie format
 args:
-   
     - movie: 
         required: true
         short: -m
